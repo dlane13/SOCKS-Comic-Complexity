@@ -8,7 +8,7 @@ data_path = '/Users/darbylane/Library/CloudStorage/OneDrive-UniversityofVermont/
 
 #extract num_panels from data_path
 #TODO: not working, not sure why not - doesn't think "Panel #" is a column name
-num_panels = pd.read_excel(data_path, usecols="Panel #")
+num_panels = pd.read_excel(data_path, usecols=["Panel #"])
 
 print(list(num_panels.columns.values))
 
