@@ -15,6 +15,10 @@ from chandra.model.schema import BatchInputItem
 from chandra.output import parse_markdown
 from PIL import Image
 import torch
+import re
+import spacy
+import textstat
+from lexical_diversity import lex_div as ld
 
 IMAGES_PATH = Path('/Users/darbylane/Library/CloudStorage/OneDrive-UniversityofVermont/'
                    'VEA study - tasks for students/SOCKS project/CH Corpus/Originals')
@@ -48,12 +52,12 @@ def manga_whisperer_transcription():
     
     return transcription
 
-def lexical_complexity(transcription: str) -> int:
-    tokenizer = AutoTokenizer.from_pretrained("abhi1nandy2/Bible-roberta-base")
-    model = AutoModelForMaskedLM.from_pretrained("abhi1nandy2/Bible-roberta-base", trust_remote_code=True).cuda()
-    inputs = tokenizer(transcription, return_tensors='pt')
-    outputs = model.generate(**inputs)
-    print(tokenizer.batch_decode(outputs))
+# def lexical_complexity(transcription: str) -> int:
+#     tokenizer = AutoTokenizer.from_pretrained("abhi1nandy2/Bible-roberta-base")
+#     model = AutoModelForMaskedLM.from_pretrained("abhi1nandy2/Bible-roberta-base", trust_remote_code=True).cuda()
+#     inputs = tokenizer(transcription, return_tensors='pt')
+#     outputs = model.generate(**inputs)
+#     print(tokenizer.batch_decode(outputs))
 
 def tesseract_transcription():
     def extract_text_from_image(image_path):
@@ -143,18 +147,25 @@ def chandra_ocr_transcription():
     batch = [
         BatchInputItem(
             image=Image.open(Path(IMAGES_PATH / 'CH.1985.11.18.png')),
-            prompt_type="ocr_layout",
-            prompt="Only transcribe the text from the image, and do not describe anything additional about the scene or the characters or events."
+            prompt_type="ocr",
+            prompt="Transcribe only the spoken text and dialogue visible in this image. Output plain text only. Do not generate markdown, alt text, image descriptions, or captions."
         )
     ]
 
     result = generate_hf(batch, model)[0]
     markdown = parse_markdown(result.raw)
+    markdown = re.sub(r'!\[.*?\]\(.*?\)', '', markdown, flags=re.DOTALL).strip()
     print(markdown)
     return markdown
 
+nlp = spacy.load("en_core_web_sm")
+
+def lexical_complexity(doc: str):
+    print(textstat.flesch_reading_ease(doc))
+    print(textstat.dale_chall_readability_score(doc))
 
 
 lexical_complexity(chandra_ocr_transcription())
+#lexical_complexity(chandra_ocr_transcription())
 
 
