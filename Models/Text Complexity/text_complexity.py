@@ -150,7 +150,7 @@ def chandra_ocr_transcription():
     result = generate_hf(batch, model)[0]
     markdown = parse_markdown(result.raw)
     markdown = re.sub(r'!\[.*?\]\(.*?\)', '', markdown, flags=re.DOTALL).strip()
-    markdown = re.sub(r'^©.*$', '', markdown, flags=re.MULTILINE)
+    markdown = re.sub(r'^©.*$', '', markdown, flags=re.MULTILINE).strip()
     print(markdown)
     return markdown
 
