@@ -1,0 +1,41 @@
+{
+    "annotation_guide": "~/code/llama-4-setup/custom/TINTINGuide_A5_shorter.pdf",
+    "output_csv": "prompt_output.csv",
+    "entries": [
+        {
+            "feature_name": "layout_complexity",
+            "text": "Evaluate the layout complexity of each panel using the definitions and scoring criteria in the layout complexity section of the annotation guide, which covers panel shapes, borders, panel organization, and directionality. For each panel, output exactly one line in this format: PANEL <n>: <score>, where <score> is a number between 0 and 1 representing the averaged layout complexity score across all four sub-variables.",
+            "image": "~/Comic Complexity/CH1.png"
+        }, 
+        {
+            "feature_name": "sequencing_complexity",
+            "text": "Evaluate the complexity of the sequencing of images in each panel using the definitions and scoring criteria in the annotations section of the annotation guide, which covers time, space and characters, and how they change from panel to panel. Also, take into consideration situational coherence between panels, as well as narrative complexity across panels. For each panel, excluding the first and last ones, assign a score from 0 to 1 which denotes the extremity of change from the panel before to the current panel, as well as the current panel and the panel after, and average these to obtain the overall sequencing complexity score for that panel. For the first panel in the comic, its sequencing complexity score will denote the extremity of change between the first panel and the second panel, and for the last panel, it will denote the extremity of change between the second-to-last panel and the last panel. For each panel, output exactly one line in this format: PANEL <n>: <score>, where <score> is this layout compelxity score.",
+            "image": "~/Comic Complexity/CH1.png"
+        },
+        {
+            "feature_name": "background_complexity",
+            "text": "Evaluate the complexity of the background of each panel using the five possible backgrounds defined in the annotation guide. After determining which of the five options applies to the panel, assign the following scores based on the appropriate background characterization: no background = 0, impossible background = 0, depicted background = 1, affix background = 0.5, amorphic background = 0.75. For each panel, output exactly one line in this format: PANEL <n>: <score>, where <score> is the aforementioned score.",
+            "image": "~/Comic Complexity/CH1.png"
+        },
+        {
+            "feature_name": "composition_complexity",
+            "text": "Evaluate the complexity of the compositional structure of each panel using the definitions of each of the following features provided in the annotation guide: angle of view, shot scale, flow, and framing angle. The complexity of the angle of view is 0 for a head-on shot, 0.5 for a mid angle, and 1 for an extreme high or low angle. The complexity of the shot scale is 0 for a medium shot, and 1 for an extreme close-up or an extremely far shot. The complexity of the flow is 0 for action panels which match the direction that the perspective of the panel is going, and 1 if these disagree (or 0 if there is no action in the panel). The complexity of the framing angle is 0 for a standard framing and 1 for a dutch angle. Take these 4 complexity scores and average them for the compositional structure complexity. For each panel, output exactly one line in this format: PANEL <n>: <score>, where <score> is the aforementioned compositional complexity score.",
+            "image":"~/Comic Complexity/CH1.png"
+        },
+        {
+            "feature_name": "perspective_complexity",
+            "text": "Evaluate the complexity of the perspective of each panel using the explanation of perspective taking in the annotation guide. Assign a 0 to the panel if the perspective ie objective, 1 if the perspective is first-person, and 0.5 if the perspective is an indirect shot, such as a shot over the shoulder of a character or through the legs. For each panel, output exactly one line in this format: PANEL <n>: <score>, where <score> is the aforementioned score.",
+            "image":"~/Comic Complexity/CH1.png"
+        },
+        {
+            "feature_name": "conventionalization_complexity",
+            "text": "Evaluate the conventionalization complexity of each panel using the explanations of template panels in the annotation guide. If the panel fits one of the described and/or visualized templates, assign the panel a conventionalization complexity score of 0, else 1. For each panel, output exactly one line in this format: PANEL <n>: <score>, where <score> is the aforementioned complexity score.",
+            "image":"~/Comic Complexity/CH1.png"
+        },
+        {
+            "feature_name": "num_characters_complexity",
+            "text": "Evaluate the complexity of each panel by how many characters are visualized in the panel. If there are more than 4 characters, assign a score of 1. If there are less than 4, assign a score of 0. If one character is imaginative but based on a pre-existing character in that panel, count the imaginative character as 0.5 characters. For each panel, output exactly one line in this format: PANEL <n>: <score>, where <score> is the aforementioned score.",
+            "image":"~/Comic Complexity/CH1.png"
+        }
+    ]
+}
