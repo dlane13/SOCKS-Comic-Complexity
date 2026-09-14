@@ -1,0 +1,48 @@
+#!/bin/bash
+#SBATCH --job-name=llama4_mav_chat_8xH200sxm
+#SBATCH --time=0:50:00
+#SBATCH --partition=nvgpu
+#SBATCH --constraint=GPU_SKU:H200_SXM
+#SBATCH --nodes=1
+#SBATCH --ntasks=8
+#SBATCH --gpus=8
+#SBATCH --mem=0
+#SBATCH --mail-type=ALL
+#SBATCH --output=%x_%j.out
+
+if [ -z "$LLAMA_SETUP_CODE_LOCATION" ]; then
+  LLAMA_SETUP_CODE_LOCATION="${HOME}/code"
+fi
+
+llama_env="llama-4-setup"
+model="/gpfs1/llm/llama-4.0/Llama-4-Maverick-17B-128E-Instruct"
+prompt_script="${HOME}/code/llama-4-setup/custom/run_prompt.py"
+prompts_file="${HOME}/code/llama-4-setup/custom/prompts.json"
+utility_script="${LLAMA_SETUP_CODE_LOCATION}/llama-4-setup/benchmarking_setup/utilities.sh"
+num_gpus=8
+
+echo "With code located in: ${LLAMA_SETUP_CODE_LOCATION}"
+echo "Running prompt script: ${prompt_script}"
+echo "Using prompts file: ${prompts_file}"
+echo "On model: ${model}"
+
+my_job_header
+
+module purge
+source ~/.bashrc
+source "$utility_script"
+system_conda activate "${llama_env}"
+
+set -x
+start=$(date +%s)
+export TMPDIR=$(mktemp -d)
+
+torchrun \
+  --nproc_per_node=$num_gpus \
+  "$prompt_script" \
+  "$model" \
+  --prompts_file="$prompts_file" \
+  --world_size=$num_gpus
+
+stop=$(date +%s)
+echo "torchrun time: $((stop-start)) seconds"
